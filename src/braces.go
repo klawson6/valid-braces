@@ -1,8 +1,6 @@
 package main
 
-import (
-	"slices"
-)
+import "valid-braces/src/utils"
 
 type CharMap = map[int32]uint8
 
@@ -32,7 +30,7 @@ func BraceYourself(braces string) bool {
 
 func getLeftBraces(braces string) (lbs string, remaining string) {
 	for i, b := range braces {
-		if slices.Contains(RIGHT_BRACES, b) {
+		if utils.Contains(RIGHT_BRACES, b) {
 			lbs = braces[:i]
 			remaining = braces[i:]
 			return
