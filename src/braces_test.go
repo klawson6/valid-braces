@@ -27,6 +27,11 @@ func TestBraceYourself(t *testing.T) {
 			want: true,
 		},
 		{
+			name: "When brace string has a valid series within a valid nest, then returns true",
+			args: args{braces: "([{()[]{}}])[]{}"},
+			want: true,
+		},
+		{
 			name: "When brace string has both series and nest of valid braces, then returns true",
 			args: args{braces: "([{}])[]{}"},
 			want: true,
@@ -44,6 +49,16 @@ func TestBraceYourself(t *testing.T) {
 		{
 			name: "When brace string has a valid nest as well as unmatched braces, then returns false",
 			args: args{braces: "[({})](]"},
+			want: false,
+		},
+		{
+			name: "When brace has only unmatched opening braces, then returns false",
+			args: args{braces: "[[[{{((({"},
+			want: false,
+		},
+		{
+			name: "When brace has only unmatched closing braces, then returns false",
+			args: args{braces: "))]]})"},
 			want: false,
 		},
 	}

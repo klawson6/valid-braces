@@ -2,41 +2,34 @@ package main
 
 import "valid-braces/src/utils"
 
-type CharMap = map[int32]uint8
+type CharMap = map[uint8]uint8
 
 var BRACE_MAP = CharMap{
-	'{': '}',
-	'[': ']',
-	'(': ')',
+	'}': '{',
+	']': '[',
+	')': '(',
 }
 
-var RIGHT_BRACES = []int32{'}', ']', ')'}
+var RIGHT_BRACES = []rune{'}', ']', ')'}
 
 func BraceYourself(braces string) bool {
+	from := 0
 	for len(braces) > 0 {
-		lbs, remaining := getLeftBraces(braces)
-		if len(lbs) > len(remaining) {
+		rb := firstRightBrace(braces, from)
+		if rb <= 0 || braces[rb-1] != BRACE_MAP[braces[rb]] {
 			return false
 		}
-		for i, b := range lbs {
-			if remaining[len(lbs)-(i+1)] != BRACE_MAP[b] {
-				return false
-			}
-		}
-		braces = remaining[len(lbs):]
+		braces = braces[0:rb-1] + braces[rb+1:]
+		from = rb - 1
 	}
 	return true
 }
 
-func getLeftBraces(braces string) (lbs string, remaining string) {
-	for i, b := range braces {
+func firstRightBrace(braces string, start int) (rb int) {
+	for i, b := range braces[start:] {
 		if utils.Contains(RIGHT_BRACES, b) {
-			lbs = braces[:i]
-			remaining = braces[i:]
-			return
+			return i + start
 		}
 	}
-	lbs = braces
-	remaining = ""
-	return
+	return -1
 }
